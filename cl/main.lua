@@ -1,7 +1,7 @@
 RSCore = nil
 
-PlayerData = {}
 isLoggedIn = false
+PlayerJob = {}
 
 Citizen.CreateThread(function() 
     while true do
@@ -10,22 +10,18 @@ Citizen.CreateThread(function()
             TriggerEvent("RSCore:GetObject", function(obj) RSCore = obj end)    
             Citizen.Wait(200)
         end
-	end
-
-	PlayerData = RSCore.Functions.GetPlayerData()
+    end
 end)
 
 RegisterNetEvent('RSCore:Client:OnPlayerLoaded')
 AddEventHandler('RSCore:Client:OnPlayerLoaded', function()
-    RSCore.Functions.GetPlayerData(function(PlayerData)
-        PlayerJob = PlayerData.job
-    end)
     isLoggedIn = true
+    PlayerJob = RSCore.Functions.GetPlayerData().job
 end)
 
 RegisterNetEvent('RSCore:Client:OnJobUpdate')
 AddEventHandler('RSCore:Client:OnJobUpdate', function(JobInfo)
-	PlayerJob = JobInfo
+    PlayerJob = JobInfo
 end)
 
 local SpawnedPlants = {}
@@ -381,6 +377,7 @@ RegisterNetEvent('orp:weed:client:feedPlant')
 AddEventHandler('orp:weed:client:feedPlant', function()
     local entity = nil
     local plant = GetClosestPlant()
+    local ped = GetPlayerPed(-1)
     isDoingAction = true
 
     for k, v in pairs(SpawnedPlants) do
