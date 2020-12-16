@@ -22,6 +22,7 @@ RSCore.Functions.CreateUseableItem("weed_og-kush_seed", function(source, item)
     local Player = RSCore.Functions.GetPlayer(src)
     TriggerClientEvent('orp:weed:client:plantNewSeed', src, 'og_kush')
     Player.Functions.RemoveItem('weed_og-kush_seed', 1)
+    TriggerClientEvent('inventory:client:ItemBox', source, RSCore.Shared.Items['weed_og-kush_seed'], "remove")
 end)
 
 RSCore.Functions.CreateUseableItem('weed_bananakush_seed', function(source, item)
@@ -29,6 +30,7 @@ RSCore.Functions.CreateUseableItem('weed_bananakush_seed', function(source, item
     local Player = RSCore.Functions.GetPlayer(src)
     TriggerClientEvent('orp:weed:client:plantNewSeed', src, 'banana_kush')
     Player.Functions.RemoveItem('weed_bananakush_seed', 1)
+    TriggerClientEvent('inventory:client:ItemBox', source, RSCore.Shared.Items['weed_bananakush_seed'], "remove")
 end)
 
 RSCore.Functions.CreateUseableItem('weed_bluedream_seed', function(source, item)
@@ -36,6 +38,7 @@ RSCore.Functions.CreateUseableItem('weed_bluedream_seed', function(source, item)
     local Player = RSCore.Functions.GetPlayer(src)
     TriggerClientEvent('orp:weed:client:plantNewSeed', src, 'blue_dream')
     Player.Functions.RemoveItem('weed_bluedream_seed', 1)
+    TriggerClientEvent('inventory:client:ItemBox', source, RSCore.Shared.Items['weed_bluedream_seed'], "remove")
 end)
 
 RSCore.Functions.CreateUseableItem('weed_purple-haze_seed', function(source, item)
@@ -43,17 +46,17 @@ RSCore.Functions.CreateUseableItem('weed_purple-haze_seed', function(source, ite
     local Player = RSCore.Functions.GetPlayer(src)
     TriggerClientEvent('orp:weed:client:plantNewSeed', src, 'purplehaze')
     Player.Functions.RemoveItem('weed_purple-haze_seed', 1)
+    TriggerClientEvent('inventory:client:ItemBox', source, RSCore.Shared.Items['weed_purple-haze_seed'], "remove")
 end)
 
 RegisterServerEvent('orp:weed:server:saveWeedPlant')
 AddEventHandler('orp:weed:server:saveWeedPlant', function(data, plantId)
     local data = json.encode(data)
-    
-    MySQL.Async.execute('INSERT INTO weed_plants (properties, plantid) VALUES (@properties)', {
+
+    MySQL.Async.execute('INSERT INTO weed_plants (properties, plantid) VALUES (@properties, @plantid)', {
         ['@properties'] = data,
         ['@plantid'] = plantId
-    }, function ()
-    end)
+    })
 end)
 
 RegisterServerEvent('orp:server:checkPlayerHasThisItem')
@@ -73,7 +76,7 @@ AddEventHandler('orp:weed:server:giveShittySeed', function()
     local src = source
     local xPlayer = RSCore.Functions.GetPlayer(src)
     xPlayer.Functions.AddItem(Config.BadSeedReward, math.random(1, 2))
-	TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items[Config.BadSeedReward], "add")
+	TriggerClientEvent('inventory:client:ItemBox', src, RSCore.Shared.Items[Config.BadSeedReward], "add")
 end)
 
 RegisterServerEvent('orp:weed:server:plantNewSeed')
@@ -167,16 +170,16 @@ AddEventHandler('orp:weed:harvestWeed', function(plantId)
             TriggerClientEvent('orp:weed:client:notify', src, 'You harvest x' .. amount .. ' ' .. label)
         end
         xPlayer.Functions.AddItem(item, amount)
-        TriggerClientEvent('inventory:client:ItemBox', source, QBCore.Shared.Items[item], "add")
+        TriggerClientEvent('inventory:client:ItemBox', source, RSCore.Shared.Items[item], "add")
         if goodQuality then
             if math.random(1, 10) > 3 then
                 local seed = math.random(1, #Config.GoodSeedRewards)
                 xPlayer.Functions.AddItem(Config.GoodSeedRewards[seed], math.random(2, 4))
-                TriggerClientEvent('inventory:client:ItemBox', source, QBCore.Shared.Items[Config.GoodSeedRewards[seed]], "add")
+                TriggerClientEvent('inventory:client:ItemBox', source, RSCore.Shared.Items[Config.GoodSeedRewards[seed]], "add")
             end
         else
             xPlayer.Functions.AddItem(Config.BadSeedRewards, math.random(1, 2))
-            TriggerClientEvent('inventory:client:ItemBox', source, QBCore.Shared.Items[Config.BadSeedRewards], "add")
+            TriggerClientEvent('inventory:client:ItemBox', source, RSCore.Shared.Items[Config.BadSeedRewards], "add")
         end
     end
 end)
@@ -201,7 +204,7 @@ AddEventHandler('orp:weed:server:waterPlant', function(plantId)
     end
 
     xPlayer.Functions.RemoveItem('water_bottle', 1)
-    TriggerClientEvent('inventory:client:ItemBox', source, QBCore.Shared.Items['water_bottle'], "remove")
+    TriggerClientEvent('inventory:client:ItemBox', source, RSCore.Shared.Items['water_bottle'], "remove")
     TriggerEvent('orp:weed:server:updatePlants')
 end)
 
@@ -220,7 +223,7 @@ AddEventHandler('orp:weed:server:feedPlant', function(plantId)
     end
 
     xPlayer.Functions.RemoveItem('fertilizer', 1)
-    TriggerClientEvent('inventory:client:ItemBox', source, QBCore.Shared.Items['fertilizer'], "remove")
+    TriggerClientEvent('inventory:client:ItemBox', source, RSCore.Shared.Items['fertilizer'], "remove")
     TriggerEvent('orp:weed:server:updatePlants')
 end)
 
