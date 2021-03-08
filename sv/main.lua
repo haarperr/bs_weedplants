@@ -53,7 +53,7 @@ RegisterServerEvent('orp:weed:server:saveWeedPlant')
 AddEventHandler('orp:weed:server:saveWeedPlant', function(data, plantId)
     local data = json.encode(data)
 
-    MySQL.Async.execute('INSERT INTO weed_plants (properties, plantid) VALUES (@properties, @plantid)', {
+    RSCore.Functions.ExecuteSql(false, 'INSERT INTO weed_plants (properties, plantid) VALUES (@properties, @plantid)', {
         ['@properties'] = data,
         ['@plantid'] = plantId
     })
@@ -76,7 +76,7 @@ AddEventHandler('orp:weed:server:giveShittySeed', function()
     local src = source
     local xPlayer = RSCore.Functions.GetPlayer(src)
     xPlayer.Functions.AddItem(Config.BadSeedReward, math.random(1, 2))
-	TriggerClientEvent('inventory:client:ItemBox', src, RSCore.Shared.Items[Config.BadSeedReward], "add")
+    TriggerClientEvent('inventory:client:ItemBox', src, RSCore.Shared.Items[Config.BadSeedReward], "add")
 end)
 
 RegisterServerEvent('orp:weed:server:plantNewSeed')
@@ -84,7 +84,7 @@ AddEventHandler('orp:weed:server:plantNewSeed', function(type, location)
     local src = source
     local plantId = math.random(111111, 999999)
     local xPlayer = RSCore.Functions.GetPlayer(src)
-    local ident = RSCore.Functions.GetIdentifier(src, "steam")
+    local ident = xPlayer.PlayerData.citizenid
     local SeedData = {id = plantId, type = type, x = location.x, y = location.y, z = location.z, hunger = Config.StartingHunger, thirst = Config.StartingThirst, growth = 0.0, quality = 100.0, stage = 1, grace = true, beingHarvested = false, planter = ident}
 
     local PlantCount = 0
@@ -229,13 +229,13 @@ end)
 
 RegisterServerEvent('orp:weed:server:updateWeedPlant')
 AddEventHandler('orp:weed:server:updateWeedPlant', function(id, data)
-    local result = MySQL.Sync.fetchAll('SELECT * FROM weed_plants WHERE plantid = @plantid', {
+    local result = RSCore.Functions.ExecuteSql(true, 'SELECT * FROM weed_plants WHERE plantid = @plantid', {
         ['@plantid'] = id
     })
 
     if result[1] then
         local newData = json.encode(data)
-        MySQL.Async.execute('UPDATE weed_plants SET properties = @properties WHERE plantid = @id', {
+        RSCore.Functions.ExecuteSql(false, 'UPDATE weed_plants SET properties = @properties WHERE plantid = @id', {
             ['@properties'] = newData,
             ['@id'] = id
         })
@@ -244,14 +244,14 @@ end)
 
 RegisterServerEvent('orp:weed:server:weedPlantRemoved')
 AddEventHandler('orp:weed:server:weedPlantRemoved', function(plantId)
-    local result = MySQL.Sync.fetchAll('SELECT * FROM weed_plants')
+    local result = RSCore.Functions.ExecuteSql(true, 'SELECT * FROM weed_plants')
 
     if result then
         for i = 1, #result do
             local plantData = json.decode(result[i].properties)
             if plantData.id == plantId then
 
-                MySQL.Async.execute('DELETE FROM weed_plants WHERE id = @id', {
+                RSCore.Functions.ExecuteSql(false, 'DELETE FROM weed_plants WHERE id = @id', {
                     ['@id'] = result[i].id
                 })
 
@@ -268,7 +268,7 @@ end)
 RegisterServerEvent('orp:weed:server:getWeedPlants')
 AddEventHandler('orp:weed:server:getWeedPlants', function()
     local data = {}
-    local result = MySQL.Sync.fetchAll('SELECT * FROM weed_plants')
+    local result = RSCore.Functions.ExecuteSql(true, 'SELECT * FROM weed_plants')
 
     if result[1] then
         for i = 1, #result do
