@@ -1,4 +1,4 @@
-RSCore = nil
+QBCore = nil
 
 isLoggedIn = false
 PlayerJob = {}
@@ -6,21 +6,21 @@ PlayerJob = {}
 Citizen.CreateThread(function() 
     while true do
         Citizen.Wait(10)
-        if RSCore == nil then
-            TriggerEvent("RSCore:GetObject", function(obj) RSCore = obj end)    
+        if QBCore == nil then
+            TriggerEvent("QBCore:GetObject", function(obj) QBCore = obj end)    
             Citizen.Wait(200)
         end
     end
 end)
 
-RegisterNetEvent('RSCore:Client:OnPlayerLoaded')
-AddEventHandler('RSCore:Client:OnPlayerLoaded', function()
+RegisterNetEvent('QBCore:Client:OnPlayerLoaded')
+AddEventHandler('QBCore:Client:OnPlayerLoaded', function()
     isLoggedIn = true
-    PlayerJob = RSCore.Functions.GetPlayerData().job
+    PlayerJob = QBCore.Functions.GetPlayerData().job
 end)
 
-RegisterNetEvent('RSCore:Client:OnJobUpdate')
-AddEventHandler('RSCore:Client:OnJobUpdate', function(JobInfo)
+RegisterNetEvent('QBCore:Client:OnJobUpdate')
+AddEventHandler('QBCore:Client:OnJobUpdate', function(JobInfo)
     PlayerJob = JobInfo
 end)
 
@@ -144,20 +144,20 @@ function DestroyPlant()
 
         TaskPlayAnim(ped, 'amb@prop_human_bum_bin@base', 'base', 8.0, 8.0, -1, 1, 1, 0, 0, 0)
         FreezeEntityPosition(ped, true)
-        --exports['progressBars']:startUI(5000, "Destroying...")
-
-        local finished = exports["np-taskbar"]:taskBar(5000, "Destroying..")
-
-        if finished == 100 then
-            --Citizen.Wait(5000)
+        QBCore.Functions.Progressbar("destroying_weed", "Destroying...", 5000, false, false, {
+            disableMovement = true,
+            disableCarMovement = true,
+            disableMouse = false,
+            disableCombat = true,
+        }, {}, {}, {}, function() -- Done
             TriggerServerEvent('orp:weed:destroyPlant', plant.id)
             isDoingAction = false
             canHarvest = true
             FreezeEntityPosition(ped, false)
             ClearPedTasksImmediately(ped)
-        end
+        end)
     else
-        RSCore.Functions.Notify("Error", "error")
+        QBCore.Functions.Notify("Error", "error")
     end
 end
 
@@ -184,20 +184,20 @@ function HarvestWeedPlant()
 
         TaskPlayAnim(ped, 'amb@prop_human_bum_bin@base', 'base', 8.0, 8.0, -1, 1, 1, 0, 0, 0)
         FreezeEntityPosition(ped, true)
-        --exports['progressBars']:startUI(5000, "Harvesting...")
-
-        local finished = exports["np-taskbar"]:taskBar(5000, "Harvesting..")
-
-        if finished == 100 then
-            --Citizen.Wait(5000)
+        QBCore.Functions.Progressbar("harvesting_weed", "Harvesting...", 5000, false, false, {
+            disableMovement = true,
+            disableCarMovement = true,
+            disableMouse = false,
+            disableCombat = true,
+        }, {}, {}, {}, function() -- Done
             TriggerServerEvent('orp:weed:harvestWeed', plant.id)
             isDoingAction = false
             canHarvest = true
             FreezeEntityPosition(ped, false)
             ClearPedTasksImmediately(ped)
-        end
+        end)
     else
-        RSCore.Functions.Notify("Error", "error")
+        QBCore.Functions.Notify("Error", "error")
     end
 end
 
@@ -283,16 +283,16 @@ Citizen.CreateThread(function()
 
                     TaskPlayAnim(ped, 'amb@prop_human_bum_bin@base', 'base', 8.0, 8.0, -1, 1, 1, 0, 0, 0)
                     FreezeEntityPosition(ped, true)
-                    --exports['progressBars']:startUI(10000, "Searching...")
-
-                    local finished = exports["np-taskbar"]:taskBar(10000, "Searching..")
-
-                    if finished == 100 then
-                        --Citizen.Wait(10000)
+                    QBCore.Functions.Progressbar("searching_seed", "Searching...", 10000, false, false, {
+                        disableMovement = true,
+                        disableCarMovement = true,
+                        disableMouse = false,
+                        disableCombat = true,
+                    }, {}, {}, {}, function() -- Done
                         FreezeEntityPosition(ped, false)
                         IsSearching = false
                         ClearPedTasksImmediately(ped)
-                    end
+                    end)
 
                     if math.random(1, 10) == 7 then
                         TriggerServerEvent('orp:weed:server:giveShittySeed')
@@ -335,7 +335,7 @@ end)
 
 RegisterNetEvent('orp:weed:client:notify')
 AddEventHandler('orp:weed:client:notify', function(msg)
-    RSCore.Functions.Notify(msg, "primary")
+    QBCore.Functions.Notify(msg, "primary")
 end)
 
 RegisterNetEvent('orp:weed:client:waterPlant')
@@ -360,17 +360,17 @@ AddEventHandler('orp:weed:client:waterPlant', function()
 
     TaskPlayAnim(ped, 'amb@prop_human_bum_bin@base', 'base', 8.0, 8.0, -1, 1, 1, 0, 0, 0)
     FreezeEntityPosition(ped, true)
-    --exports['progressBars']:startUI(2000, "Watering...")
-
-    local finished = exports["np-taskbar"]:taskBar(2000, "Watering..")
-
-    if finished == 100 then
-        Citizen.Wait(2000)
+    QBCore.Functions.Progressbar("watering_weed", "Watering...", 2000, false, false, {
+        disableMovement = true,
+        disableCarMovement = true,
+        disableMouse = false,
+        disableCombat = true,
+    }, {}, {}, {}, function() -- Done
         FreezeEntityPosition(ped, false)
         TriggerServerEvent('orp:weed:server:waterPlant', plant.id)
         ClearPedTasksImmediately(GetPlayerPed(-1))
         isDoingAction = false
-    end
+    end)
 end)
 
 RegisterNetEvent('orp:weed:client:feedPlant')
@@ -395,16 +395,17 @@ AddEventHandler('orp:weed:client:feedPlant', function()
 
     TaskPlayAnim(ped, 'amb@prop_human_bum_bin@base', 'base', 8.0, 8.0, -1, 1, 1, 0, 0, 0)
     FreezeEntityPosition(ped, false)
-    --exports['progressBars']:startUI(2000, "Fertilizing...")
-
-    local finished = exports["np-taskbar"]:taskBar(2000, "Fertilizing..")
-
-    if finished == 100 then
-        --Citizen.Wait(2000)
+    QBCore.Functions.Progressbar("fertilizing_weed", "Fertilizing...", 2000, false, false, {
+        disableMovement = true,
+        disableCarMovement = true,
+        disableMouse = false,
+        disableCombat = true,
+    }, {}, {}, {}, function() -- Done
+        FreezeEntityPosition(ped, false)
         TriggerServerEvent('orp:weed:server:feedPlant', plant.id)
         ClearPedTasksImmediately(GetPlayerPed(-1))
         isDoingAction = false
-    end
+    end)
 end)
 
 RegisterNetEvent('orp:weed:client:updateWeedData')
@@ -417,13 +418,16 @@ AddEventHandler('orp:weed:client:plantNewSeed', function(type)
     local pos = GetOffsetFromEntityInWorldCoords(GetPlayerPed(-1), 0.0, 1.0, 0.0)
 
     if CanPlantSeedHere(pos) and not IsPedInAnyVehicle(GetPlayerPed(-1), false) then
-        local finished = exports["np-taskbar"]:taskBar(math.random(1000, 2000), "Planting..")
-
-        if finished == 100 then
+        QBCore.Functions.Progressbar("planting_weed", "Planting...", math.random(1000, 2000), false, false, {
+            disableMovement = true,
+            disableCarMovement = true,
+            disableMouse = false,
+            disableCombat = true,
+        }, {}, {}, {}, function() -- Done
             TriggerServerEvent('orp:weed:server:plantNewSeed', type, pos)
-        end
+        end)
     else
-        RSCore.Functions.Notify("Too close to another plant", "error")
+        QBCore.Functions.Notify("Too close to another plant", "error")
     end
 end)
 
