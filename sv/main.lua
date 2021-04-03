@@ -1,5 +1,5 @@
-RSCore = nil
-TriggerEvent('RSCore:GetObject', function(obj) RSCore = obj end)
+QBCore = nil
+TriggerEvent('QBCore:GetObject', function(obj) QBCore = obj end)
 
 local PlantsLoaded = false
 
@@ -17,43 +17,43 @@ Citizen.CreateThread(function()
     PlantsLoaded = true
 end)
 
-RSCore.Functions.CreateUseableItem("weed_og-kush_seed", function(source, item)
+QBCore.Functions.CreateUseableItem("weed_og-kush_seed", function(source, item)
     local src = source
-    local Player = RSCore.Functions.GetPlayer(src)
+    local Player = QBCore.Functions.GetPlayer(src)
     TriggerClientEvent('orp:weed:client:plantNewSeed', src, 'og_kush')
     Player.Functions.RemoveItem('weed_og-kush_seed', 1)
-    TriggerClientEvent('inventory:client:ItemBox', source, RSCore.Shared.Items['weed_og-kush_seed'], "remove")
+    TriggerClientEvent('inventory:client:ItemBox', source, QBCore.Shared.Items['weed_og-kush_seed'], "remove")
 end)
 
-RSCore.Functions.CreateUseableItem('weed_bananakush_seed', function(source, item)
+QBCore.Functions.CreateUseableItem('weed_bananakush_seed', function(source, item)
     local src = source
-    local Player = RSCore.Functions.GetPlayer(src)
+    local Player = QBCore.Functions.GetPlayer(src)
     TriggerClientEvent('orp:weed:client:plantNewSeed', src, 'banana_kush')
     Player.Functions.RemoveItem('weed_bananakush_seed', 1)
-    TriggerClientEvent('inventory:client:ItemBox', source, RSCore.Shared.Items['weed_bananakush_seed'], "remove")
+    TriggerClientEvent('inventory:client:ItemBox', source, QBCore.Shared.Items['weed_bananakush_seed'], "remove")
 end)
 
-RSCore.Functions.CreateUseableItem('weed_bluedream_seed', function(source, item)
+QBCore.Functions.CreateUseableItem('weed_bluedream_seed', function(source, item)
     local src = source
-    local Player = RSCore.Functions.GetPlayer(src)
+    local Player = QBCore.Functions.GetPlayer(src)
     TriggerClientEvent('orp:weed:client:plantNewSeed', src, 'blue_dream')
     Player.Functions.RemoveItem('weed_bluedream_seed', 1)
-    TriggerClientEvent('inventory:client:ItemBox', source, RSCore.Shared.Items['weed_bluedream_seed'], "remove")
+    TriggerClientEvent('inventory:client:ItemBox', source, QBCore.Shared.Items['weed_bluedream_seed'], "remove")
 end)
 
-RSCore.Functions.CreateUseableItem('weed_purple-haze_seed', function(source, item)
+QBCore.Functions.CreateUseableItem('weed_purple-haze_seed', function(source, item)
     local src = source
-    local Player = RSCore.Functions.GetPlayer(src)
+    local Player = QBCore.Functions.GetPlayer(src)
     TriggerClientEvent('orp:weed:client:plantNewSeed', src, 'purplehaze')
     Player.Functions.RemoveItem('weed_purple-haze_seed', 1)
-    TriggerClientEvent('inventory:client:ItemBox', source, RSCore.Shared.Items['weed_purple-haze_seed'], "remove")
+    TriggerClientEvent('inventory:client:ItemBox', source, QBCore.Shared.Items['weed_purple-haze_seed'], "remove")
 end)
 
 RegisterServerEvent('orp:weed:server:saveWeedPlant')
 AddEventHandler('orp:weed:server:saveWeedPlant', function(data, plantId)
     local data = json.encode(data)
 
-    RSCore.Functions.ExecuteSql(false, 'INSERT INTO weed_plants (properties, plantid) VALUES (@properties, @plantid)', {
+    QBCore.Functions.ExecuteSql(false, 'INSERT INTO weed_plants (properties, plantid) VALUES (@properties, @plantid)', {
         ['@properties'] = data,
         ['@plantid'] = plantId
     })
@@ -62,7 +62,7 @@ end)
 RegisterServerEvent('orp:server:checkPlayerHasThisItem')
 AddEventHandler('orp:server:checkPlayerHasThisItem', function(item, cb)
     local src = source
-    local xPlayer = RSCore.Functions.GetPlayer(src)
+    local xPlayer = QBCore.Functions.GetPlayer(src)
 
     if xPlayer.Functions.GetItemByName(item).amount > 0 then
         TriggerClientEvent(cb, src)
@@ -74,16 +74,16 @@ end)
 RegisterServerEvent('orp:weed:server:giveShittySeed')
 AddEventHandler('orp:weed:server:giveShittySeed', function()
     local src = source
-    local xPlayer = RSCore.Functions.GetPlayer(src)
+    local xPlayer = QBCore.Functions.GetPlayer(src)
     xPlayer.Functions.AddItem(Config.BadSeedReward, math.random(1, 2))
-    TriggerClientEvent('inventory:client:ItemBox', src, RSCore.Shared.Items[Config.BadSeedReward], "add")
+    TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items[Config.BadSeedReward], "add")
 end)
 
 RegisterServerEvent('orp:weed:server:plantNewSeed')
 AddEventHandler('orp:weed:server:plantNewSeed', function(type, location)
     local src = source
     local plantId = math.random(111111, 999999)
-    local xPlayer = RSCore.Functions.GetPlayer(src)
+    local xPlayer = QBCore.Functions.GetPlayer(src)
     local ident = xPlayer.PlayerData.citizenid
     local SeedData = {id = plantId, type = type, x = location.x, y = location.y, z = location.z, hunger = Config.StartingHunger, thirst = Config.StartingThirst, growth = 0.0, quality = 100.0, stage = 1, grace = true, beingHarvested = false, planter = ident}
 
@@ -119,7 +119,7 @@ end)
 RegisterServerEvent('orp:weed:destroyPlant')
 AddEventHandler('orp:weed:destroyPlant', function(plantId)
     local src = source
-    local xPlayer = RSCore.Functions.GetPlayer(src)
+    local xPlayer = QBCore.Functions.GetPlayer(src)
 
     for k, v in pairs(Config.Plants) do
         if v.id == plantId then
@@ -136,7 +136,7 @@ end)
 RegisterServerEvent('orp:weed:harvestWeed')
 AddEventHandler('orp:weed:harvestWeed', function(plantId)
     local src = source
-    local xPlayer = RSCore.Functions.GetPlayer(src)
+    local xPlayer = QBCore.Functions.GetPlayer(src)
     local amount
     local label
     local item
@@ -170,16 +170,16 @@ AddEventHandler('orp:weed:harvestWeed', function(plantId)
             TriggerClientEvent('orp:weed:client:notify', src, 'You harvest x' .. amount .. ' ' .. label)
         end
         xPlayer.Functions.AddItem(item, amount)
-        TriggerClientEvent('inventory:client:ItemBox', source, RSCore.Shared.Items[item], "add")
+        TriggerClientEvent('inventory:client:ItemBox', source, QBCore.Shared.Items[item], "add")
         if goodQuality then
             if math.random(1, 10) > 3 then
                 local seed = math.random(1, #Config.GoodSeedRewards)
                 xPlayer.Functions.AddItem(Config.GoodSeedRewards[seed], math.random(2, 4))
-                TriggerClientEvent('inventory:client:ItemBox', source, RSCore.Shared.Items[Config.GoodSeedRewards[seed]], "add")
+                TriggerClientEvent('inventory:client:ItemBox', source, QBCore.Shared.Items[Config.GoodSeedRewards[seed]], "add")
             end
         else
             xPlayer.Functions.AddItem(Config.BadSeedRewards, math.random(1, 2))
-            TriggerClientEvent('inventory:client:ItemBox', source, RSCore.Shared.Items[Config.BadSeedRewards], "add")
+            TriggerClientEvent('inventory:client:ItemBox', source, QBCore.Shared.Items[Config.BadSeedRewards], "add")
         end
     end
 end)
@@ -192,7 +192,7 @@ end)
 RegisterServerEvent('orp:weed:server:waterPlant')
 AddEventHandler('orp:weed:server:waterPlant', function(plantId)
     local src = source
-    local xPlayer = RSCore.Functions.GetPlayer(src)
+    local xPlayer = QBCore.Functions.GetPlayer(src)
 
     for k, v in pairs(Config.Plants) do
         if v.id == plantId then
@@ -204,14 +204,14 @@ AddEventHandler('orp:weed:server:waterPlant', function(plantId)
     end
 
     xPlayer.Functions.RemoveItem('water_bottle', 1)
-    TriggerClientEvent('inventory:client:ItemBox', source, RSCore.Shared.Items['water_bottle'], "remove")
+    TriggerClientEvent('inventory:client:ItemBox', source, QBCore.Shared.Items['water_bottle'], "remove")
     TriggerEvent('orp:weed:server:updatePlants')
 end)
 
 RegisterServerEvent('orp:weed:server:feedPlant')
 AddEventHandler('orp:weed:server:feedPlant', function(plantId)
     local src = source
-    local xPlayer = RSCore.Functions.GetPlayer(src)
+    local xPlayer = QBCore.Functions.GetPlayer(src)
 
     for k, v in pairs(Config.Plants) do
         if v.id == plantId then
@@ -223,19 +223,19 @@ AddEventHandler('orp:weed:server:feedPlant', function(plantId)
     end
 
     xPlayer.Functions.RemoveItem('fertilizer', 1)
-    TriggerClientEvent('inventory:client:ItemBox', source, RSCore.Shared.Items['fertilizer'], "remove")
+    TriggerClientEvent('inventory:client:ItemBox', source, QBCore.Shared.Items['fertilizer'], "remove")
     TriggerEvent('orp:weed:server:updatePlants')
 end)
 
 RegisterServerEvent('orp:weed:server:updateWeedPlant')
 AddEventHandler('orp:weed:server:updateWeedPlant', function(id, data)
-    local result = RSCore.Functions.ExecuteSql(true, 'SELECT * FROM weed_plants WHERE plantid = @plantid', {
+    local result = QBCore.Functions.ExecuteSql(true, 'SELECT * FROM weed_plants WHERE plantid = @plantid', {
         ['@plantid'] = id
     })
 
     if result[1] then
         local newData = json.encode(data)
-        RSCore.Functions.ExecuteSql(false, 'UPDATE weed_plants SET properties = @properties WHERE plantid = @id', {
+        QBCore.Functions.ExecuteSql(false, 'UPDATE weed_plants SET properties = @properties WHERE plantid = @id', {
             ['@properties'] = newData,
             ['@id'] = id
         })
@@ -244,14 +244,14 @@ end)
 
 RegisterServerEvent('orp:weed:server:weedPlantRemoved')
 AddEventHandler('orp:weed:server:weedPlantRemoved', function(plantId)
-    local result = RSCore.Functions.ExecuteSql(true, 'SELECT * FROM weed_plants')
+    local result = QBCore.Functions.ExecuteSql(true, 'SELECT * FROM weed_plants')
 
     if result then
         for i = 1, #result do
             local plantData = json.decode(result[i].properties)
             if plantData.id == plantId then
 
-                RSCore.Functions.ExecuteSql(false, 'DELETE FROM weed_plants WHERE id = @id', {
+                QBCore.Functions.ExecuteSql(false, 'DELETE FROM weed_plants WHERE id = @id', {
                     ['@id'] = result[i].id
                 })
 
@@ -268,7 +268,7 @@ end)
 RegisterServerEvent('orp:weed:server:getWeedPlants')
 AddEventHandler('orp:weed:server:getWeedPlants', function()
     local data = {}
-    local result = RSCore.Functions.ExecuteSql(true, 'SELECT * FROM weed_plants')
+    local result = QBCore.Functions.ExecuteSql(true, 'SELECT * FROM weed_plants')
 
     if result[1] then
         for i = 1, #result do
