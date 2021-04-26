@@ -37,8 +37,8 @@ Config.MaxPlantCount = 12
 Config.BadSeedReward = "weed_og-kush_seed" -- 125
 
 Config.GoodSeedRewards = {
-    [1] = "weed_bananakush_seed", -- 185
-    [2] = "weed_bluedream_seed", -- 175
+    [1] = "weed_banana-kush_seed", -- 185
+    [2] = "weed_blue-dream_seed", -- 175
     [3] = "weed_purple-haze_seed", -- 190
 }
 
