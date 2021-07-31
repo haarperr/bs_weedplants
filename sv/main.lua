@@ -74,8 +74,8 @@ end)
 RegisterServerEvent('orp:weed:server:giveShittySeed')
 AddEventHandler('orp:weed:server:giveShittySeed', function()
     local src = source
-    local xPlayer = QBCore.Functions.GetPlayer(src)
-    xPlayer.Functions.AddItem(Config.BadSeedReward, math.random(1, 2))
+    local Player = QBCore.Functions.GetPlayer(src)
+    Player.Functions.AddItem(Config.BadSeedReward, math.random(1, 2))
     TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items[Config.BadSeedReward], "add")
 end)
 
