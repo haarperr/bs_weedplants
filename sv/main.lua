@@ -1,5 +1,4 @@
-QBCore = nil
-TriggerEvent('QBCore:GetObject', function(obj) QBCore = obj end)
+local QBCore = exports['qb-core']:GetCoreObject()
 
 local PlantsLoaded = false
 
@@ -53,7 +52,7 @@ RegisterServerEvent('orp:weed:server:saveWeedPlant')
 AddEventHandler('orp:weed:server:saveWeedPlant', function(data, plantId)
     local data = json.encode(data)
 
-    exports.ghmattimysql:execute('INSERT INTO weed_plants (properties, plantid) VALUES (@properties, @plantid)', {
+    MySQL.insert('INSERT INTO weed_plants (properties, plantid) VALUES (@properties, @plantid)', {
         ['@properties'] = data,
         ['@plantid'] = plantId
     })
@@ -84,6 +83,7 @@ AddEventHandler('orp:weed:server:plantNewSeed', function(type, location)
     local src = source
     local plantId = math.random(111111, 999999)
     local Player = QBCore.Functions.GetPlayer(src)
+    local citizenId = Player.PlayerData.citizenid
     local SeedData = {
         id = plantId, 
         type = type, 
@@ -97,13 +97,13 @@ AddEventHandler('orp:weed:server:plantNewSeed', function(type, location)
         stage = 1, 
         grace = true, 
         beingHarvested = false, 
-        planter = Player.PlayerData.citizenid
+        planter = citizenId
     }
 
     local PlantCount = 0
 
     for k, v in pairs(Config.Plants) do
-        if v.planter == Player.PlayerData.citizenid then
+        if v.planter == citizenId then
             PlantCount = PlantCount + 1
         end
     end
@@ -242,13 +242,13 @@ end)
 
 RegisterServerEvent('orp:weed:server:updateWeedPlant')
 AddEventHandler('orp:weed:server:updateWeedPlant', function(id, data)
-    local result = exports.ghmattimysql:executeSync('SELECT * FROM weed_plants WHERE plantid = @plantid', {
+    local result = MySQL.query.await('SELECT * FROM weed_plants WHERE plantid = @plantid', {
         ['@plantid'] = id
     })
 
     if result[1] then
         local newData = json.encode(data)
-        exports.ghmattimysql:execute('UPDATE weed_plants SET properties = @properties WHERE plantid = @id', {
+        MySQL.update('UPDATE weed_plants SET properties = @properties WHERE plantid = @id', {
             ['@properties'] = newData,
             ['@id'] = id
         })
@@ -257,14 +257,14 @@ end)
 
 RegisterServerEvent('orp:weed:server:weedPlantRemoved')
 AddEventHandler('orp:weed:server:weedPlantRemoved', function(plantId)
-    local result = exports.ghmattimysql:executeSync('SELECT * FROM weed_plants')
+    local result = MySQL.query.await('SELECT * FROM weed_plants')
 
     if result then
         for i = 1, #result do
             local plantData = json.decode(result[i].properties)
             if plantData.id == plantId then
 
-                exports.ghmattimysql:execute('DELETE FROM weed_plants WHERE id = @id', {
+                MySQL.query('DELETE FROM weed_plants WHERE id = @id', {
                     ['@id'] = result[i].id
                 })
 
@@ -281,12 +281,12 @@ end)
 RegisterServerEvent('orp:weed:server:getWeedPlants')
 AddEventHandler('orp:weed:server:getWeedPlants', function()
     local data = {}
-    local result = exports.ghmattimysql:executeSync('SELECT * FROM weed_plants')
+    local result = MySQL.query.await('SELECT * FROM weed_plants')
 
     if result[1] then
         for i = 1, #result do
             local plantData = json.decode(result[i].properties)
-            print(plantData.id)
+            --print(plantData.id)
             table.insert(Config.Plants, plantData)
         end
     end
