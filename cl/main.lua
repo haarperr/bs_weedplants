@@ -1,17 +1,7 @@
-QBCore = nil
+local QBCore = exports['qb-core']:GetCoreObject()
 
 isLoggedIn = false
 PlayerJob = {}
-
-Citizen.CreateThread(function() 
-    while true do
-        Citizen.Wait(10)
-        if QBCore == nil then
-            TriggerEvent("QBCore:GetObject", function(obj) QBCore = obj end)    
-            Citizen.Wait(200)
-        end
-    end
-end)
 
 RegisterNetEvent('QBCore:Client:OnPlayerLoaded')
 AddEventHandler('QBCore:Client:OnPlayerLoaded', function()
