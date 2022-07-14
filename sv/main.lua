@@ -16,11 +16,11 @@ Citizen.CreateThread(function()
     PlantsLoaded = true
 end)
 
-QBCore.Functions.CreateUseableItem("weed_og-kush_seed", function(source, item)
+QBCore.Functions.CreateUseableItem("weed_ogkush_seed", function(source, item)
     local src = source
     local Player = QBCore.Functions.GetPlayer(src)
     TriggerClientEvent('orp:weed:client:plantNewSeed', src, 'og_kush')
-    Player.Functions.RemoveItem('weed_og-kush_seed', 1)
+    Player.Functions.RemoveItem('weed_ogkush_seed', 1)
     TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items['weed_og-kush_seed'], "remove")
 end)
 
@@ -40,11 +40,11 @@ QBCore.Functions.CreateUseableItem('weed_bluedream_seed', function(source, item)
     TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items['weed_bluedream_seed'], "remove")
 end)
 
-QBCore.Functions.CreateUseableItem('weed_purple-haze_seed', function(source, item)
+QBCore.Functions.CreateUseableItem('weed_purplehaze_seed', function(source, item)
     local src = source
     local Player = QBCore.Functions.GetPlayer(src)
     TriggerClientEvent('orp:weed:client:plantNewSeed', src, 'purplehaze')
-    Player.Functions.RemoveItem('weed_purple-haze_seed', 1)
+    Player.Functions.RemoveItem('weed_purplehaze_seed', 1)
     TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items['weed_purple-haze_seed'], "remove")
 end)
 
