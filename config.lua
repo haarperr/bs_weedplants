@@ -26,20 +26,20 @@ Config.QualityDegrade = {min = 8, max = 12}
 Config.GrowthIncrease = {min = 10, max = 20}
 
 Config.YieldRewards = {
-    {type = "banana_kush", rewardMin = 5, rewardMax = 6, item = 'weed_banana-kush', label = 'Banana Kush 2G'},
-    {type = "blue_dream", rewardMin = 4, rewardMax = 6, item = 'weed_blue-dream', label = 'Blue Dream 2G'},
-    {type = "purplehaze", rewardMin = 3, rewardMax = 5, item = 'weed_purple-haze', label = 'Purple Haze 2G'},
-    {type = "og_kush", rewardMin = 2, rewardMax = 3, item = 'weed_og-kush', label = 'OGKush 2G'},
+    {type = "bananakush", rewardMin = 5, rewardMax = 6, item = 'weed_bananakush', label = 'Banana Kush 2G'},
+    {type = "bluedream", rewardMin = 4, rewardMax = 6, item = 'weed_bluedream', label = 'Blue Dream 2G'},
+    {type = "purplehaze", rewardMin = 3, rewardMax = 5, item = 'weed_purplehaze', label = 'Purple Haze 2G'},
+    {type = "ogkush", rewardMin = 2, rewardMax = 3, item = 'weed_ogkush', label = 'OGKush 2G'},
 }
 
 Config.MaxPlantCount = 12
 
-Config.BadSeedReward = "weed_og-kush_seed" -- 125
+Config.BadSeedReward = "weed_ogkush_seed" -- 125
 
 Config.GoodSeedRewards = {
-    [1] = "weed_banana-kush_seed", -- 185
-    [2] = "weed_blue-dream_seed", -- 175
-    [3] = "weed_purple-haze_seed", -- 190
+    [1] = "weed_bananakush_seed", -- 185
+    [2] = "weed_bluedream_seed", -- 175
+    [3] = "weed_purplehaze_seed", -- 190
 }
 
 Config.WeedStages = {
