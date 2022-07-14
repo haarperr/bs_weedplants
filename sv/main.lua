@@ -19,15 +19,15 @@ end)
 QBCore.Functions.CreateUseableItem("weed_ogkush_seed", function(source, item)
     local src = source
     local Player = QBCore.Functions.GetPlayer(src)
-    TriggerClientEvent('orp:weed:client:plantNewSeed', src, 'og_kush')
+    TriggerClientEvent('orp:weed:client:plantNewSeed', src, 'ogkush')
     Player.Functions.RemoveItem('weed_ogkush_seed', 1)
-    TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items['weed_og-kush_seed'], "remove")
+    TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items['weed_ogkush_seed'], "remove")
 end)
 
 QBCore.Functions.CreateUseableItem('weed_bananakush_seed', function(source, item)
     local src = source
     local Player = QBCore.Functions.GetPlayer(src)
-    TriggerClientEvent('orp:weed:client:plantNewSeed', src, 'banana_kush')
+    TriggerClientEvent('orp:weed:client:plantNewSeed', src, 'bananakush')
     Player.Functions.RemoveItem('weed_bananakush_seed', 1)
     TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items['weed_bananakush_seed'], "remove")
 end)
@@ -35,7 +35,7 @@ end)
 QBCore.Functions.CreateUseableItem('weed_bluedream_seed', function(source, item)
     local src = source
     local Player = QBCore.Functions.GetPlayer(src)
-    TriggerClientEvent('orp:weed:client:plantNewSeed', src, 'blue_dream')
+    TriggerClientEvent('orp:weed:client:plantNewSeed', src, 'bluedream')
     Player.Functions.RemoveItem('weed_bluedream_seed', 1)
     TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items['weed_bluedream_seed'], "remove")
 end)
@@ -45,7 +45,7 @@ QBCore.Functions.CreateUseableItem('weed_purplehaze_seed', function(source, item
     local Player = QBCore.Functions.GetPlayer(src)
     TriggerClientEvent('orp:weed:client:plantNewSeed', src, 'purplehaze')
     Player.Functions.RemoveItem('weed_purplehaze_seed', 1)
-    TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items['weed_purple-haze_seed'], "remove")
+    TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items['weed_purplehaze_seed'], "remove")
 end)
 
 RegisterServerEvent('orp:weed:server:saveWeedPlant')
@@ -56,18 +56,6 @@ AddEventHandler('orp:weed:server:saveWeedPlant', function(data, plantId)
         ['@properties'] = data,
         ['@plantid'] = plantId
     })
-end)
-
-RegisterServerEvent('orp:server:checkPlayerHasThisItem')
-AddEventHandler('orp:server:checkPlayerHasThisItem', function(item, cb)
-    local src = source
-    local Player = QBCore.Functions.GetPlayer(src)
-
-    if Player.Functions.GetItemByName(item).amount > 0 then
-        TriggerClientEvent(cb, src)
-    else
-        TriggerClientEvent('orp:weed:client:notify', src, 'You are missing ' .. item)
-    end
 end)
 
 RegisterServerEvent('orp:weed:server:giveShittySeed')
@@ -257,7 +245,7 @@ end)
 
 RegisterServerEvent('orp:weed:server:weedPlantRemoved')
 AddEventHandler('orp:weed:server:weedPlantRemoved', function(plantId)
-    local result = MySQL.query.await('SELECT * FROM weed_plants')
+    local result = MySQL.query.await('SELECT * FROM weed_plants', {})
 
     if result then
         for i = 1, #result do
@@ -281,7 +269,7 @@ end)
 RegisterServerEvent('orp:weed:server:getWeedPlants')
 AddEventHandler('orp:weed:server:getWeedPlants', function()
     local data = {}
-    local result = MySQL.query.await('SELECT * FROM weed_plants')
+    local result = MySQL.query.await('SELECT * FROM weed_plants', {})
 
     if result[1] then
         for i = 1, #result do
