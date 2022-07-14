@@ -224,11 +224,21 @@ Citizen.CreateThread(function()
                             DrawText3D(v.x, v.y, v.z - 0.18, '~b~G~w~ - Water      ~y~H~w~ - Feed')
                             if IsControlJustReleased(0, Keys["G"]) then
                                 if v.id == plant.id then
-                                    TriggerServerEvent('orp:server:checkPlayerHasThisItem', 'water_bottle', 'orp:weed:client:waterPlant', true)
+
+                                    if not QBCore.Functions.HasItem("water_bottle", 1) then
+                                        QBCore.Functions.Notify("You are missing a water bottle", "error") 
+                                    else
+                                        TriggerEvent("orp:weed:client:waterPlant") 
+                                    end
                                 end
                             elseif IsControlJustReleased(0, Keys["H"]) then
                                 if v.id == plant.id then
                                     TriggerServerEvent('orp:server:checkPlayerHasThisItem', 'fertilizer', 'orp:weed:client:feedPlant', true)
+                                    if not QBCore.Functions.HasItem("weed_nutrition", 1) then
+                                        QBCore.Functions.Notify("You are missing a weed nutrition", "error") 
+                                    else
+                                        TriggerEvent("orp:weed:client:feedPlant") 
+                                    end
                                 end
                             end
                         else
