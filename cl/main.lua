@@ -245,7 +245,11 @@ Citizen.CreateThread(function()
                             if IsControlJustReleased(0, Keys["E"]) and canHarvest then
                                 local plant = GetClosestPlant()
                                 if v.id == plant.id then
-                                    HarvestWeedPlant()
+                                    if QBCore.Functions.HasItem("empty_weed_bag", 1) then
+                                        HarvestWeedPlant() 
+                                    else
+                                        QBCore.Functions.Notify("You need an empty weed bag for harvest this", "error") 
+                                    end
                                 end
                             end
                         end
