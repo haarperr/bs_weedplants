@@ -1,4 +1,6 @@
-# rd-weedplants
-original script made by https://github.com/HiHowdy
+# amp-weedplants
+it was originally converted for my framework, but I decided to publish this. 
 
-convert to qbus by https://github.com/smimey
+credits to https://github.com/HiHowdy
+
+convert by https://github.com/smimey
