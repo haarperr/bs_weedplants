@@ -21,9 +21,9 @@ local canHarvest = true
 local closestPlant = nil
 local isDoingAction = false
 
-Citizen.CreateThread(function()
+CreateThread(function()
     while true do
-    Citizen.Wait(150)
+    Wait(150)
 
     local ped = GetPlayerPed(-1)
     local pos = GetEntityCoords(ped)
@@ -61,7 +61,7 @@ Citizen.CreateThread(function()
                     data.stage = Config.Plants[i].stage
     
                     while not HasModelLoaded(hash) do
-                        Citizen.Wait(10)
+                        Wait(10)
                         RequestModel(hash)
                     end
     
@@ -88,7 +88,7 @@ Citizen.CreateThread(function()
                             data.stage = Config.Plants[i].stage
     
                             while not HasModelLoaded(hash) do
-                                Citizen.Wait(10)
+                                Wait(10)
                                 RequestModel(hash)
                             end
     
@@ -105,7 +105,7 @@ Citizen.CreateThread(function()
         -- end
     end
     if not InRange then
-        Citizen.Wait(5000)
+        Wait(5000)
     end
     end
 
@@ -129,7 +129,7 @@ function DestroyPlant()
 
         RequestAnimDict('amb@prop_human_bum_bin@base')
         while not HasAnimDictLoaded('amb@prop_human_bum_bin@base') do
-            Citizen.Wait(0)
+            Wait(0)
         end
 
         TaskPlayAnim(ped, 'amb@prop_human_bum_bin@base', 'base', 8.0, 8.0, -1, 1, 1, 0, 0, 0)
@@ -169,7 +169,7 @@ function HarvestWeedPlant()
 
         RequestAnimDict('amb@prop_human_bum_bin@base')
         while not HasAnimDictLoaded('amb@prop_human_bum_bin@base') do
-            Citizen.Wait(0)
+            Wait(0)
         end
 
         TaskPlayAnim(ped, 'amb@prop_human_bum_bin@base', 'base', 8.0, 8.0, -1, 1, 1, 0, 0, 0)
@@ -199,9 +199,9 @@ function RemovePlantFromTable(plantId)
     end
 end
 
-Citizen.CreateThread(function()
+CreateThread(function()
     while true do
-        Citizen.Wait(0)
+        Wait(0)
             local InRange = false
             local ped = GetPlayerPed(-1)
             local pos = GetEntityCoords(ped)
@@ -261,9 +261,9 @@ end)
 
 local IsSearching = false
 
-Citizen.CreateThread(function()
+CreateThread(function()
     while true do
-        Citizen.Wait(0)
+        Wait(0)
             local ped = GetPlayerPed(-1)
             local pos = GetEntityCoords(ped)
             local InRange = false
@@ -280,7 +280,7 @@ Citizen.CreateThread(function()
                     IsSearching = true
                     RequestAnimDict('amb@prop_human_bum_bin@base')
                     while not HasAnimDictLoaded('amb@prop_human_bum_bin@base') do
-                        Citizen.Wait(0)
+                        Wait(0)
                     end
 
                     TaskPlayAnim(ped, 'amb@prop_human_bum_bin@base', 'base', 8.0, 8.0, -1, 1, 1, 0, 0, 0)
@@ -301,7 +301,7 @@ Citizen.CreateThread(function()
                     end
                 end
             else
-                Citizen.Wait(3000)
+                Wait(3000)
             end
     end
 end)
@@ -357,7 +357,7 @@ AddEventHandler('orp:weed:client:waterPlant', function()
 
     RequestAnimDict('amb@prop_human_bum_bin@base')
     while not HasAnimDictLoaded('amb@prop_human_bum_bin@base') do
-        Citizen.Wait(0)
+        Wait(0)
     end
 
     TaskPlayAnim(ped, 'amb@prop_human_bum_bin@base', 'base', 8.0, 8.0, -1, 1, 1, 0, 0, 0)
@@ -392,7 +392,7 @@ AddEventHandler('orp:weed:client:feedPlant', function()
 
     RequestAnimDict('amb@prop_human_bum_bin@base')
     while not HasAnimDictLoaded('amb@prop_human_bum_bin@base') do
-        Citizen.Wait(0)
+        Wait(0)
     end
 
     TaskPlayAnim(ped, 'amb@prop_human_bum_bin@base', 'base', 8.0, 8.0, -1, 1, 1, 0, 0, 0)
@@ -437,10 +437,10 @@ RegisterNetEvent('orp:weed:client:plantSeedConfirm')
 AddEventHandler('orp:weed:client:plantSeedConfirm', function()
     RequestAnimDict("pickup_object")
     while not HasAnimDictLoaded("pickup_object") do
-        Citizen.Wait(7)
+        Wait(7)
     end
     TaskPlayAnim(GetPlayerPed(-1), "pickup_object" ,"pickup_low" ,8.0, -8.0, -1, 1, 0, false, false, false)
-    Citizen.Wait(1800)
+    Wait(1800)
     ClearPedTasks(GetPlayerPed(-1))
 end)
 
